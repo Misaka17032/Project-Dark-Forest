@@ -23,4 +23,5 @@ linux, unix or Mac OS. Can not support Windows temporarily.
 ## Usage
 #### 1. Downloads these two files.
 #### 2. Open the folder of those two files by terminal.
-#### 3. Run the Unix executable file named 'run'.(Using the command './run')
+#### 3. Use the command 'chmod +x ./run'. Otherwise it may have permission problem.
+#### 4. Run the Unix executable file named 'run'.(Using the command './run')
