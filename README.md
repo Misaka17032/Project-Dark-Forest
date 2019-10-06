@@ -17,11 +17,11 @@ A civilization can also get technology points by allying with or destroy other c
 
 For every war, the civilization which has fewer technology points will be destroyed.
 
-## Running Environment
-linux, unix or Mac OS. Can not support Windows temporarily.
-
 ## Usage
-#### 1. Downloads these two files.
+### For Mac OS/Linux:
+#### 1. Downloads 'run' and 'config.df'.
 #### 2. Open the folder of those two files by terminal.
 #### 3. Use the command 'chmod +x ./run'. Otherwise it may have permission problem.
 #### 4. Run the Unix executable file named 'run'.(Using the command './run')
+### For All Operate System:
+#### Use python2 to run 'darkforest.df'.
