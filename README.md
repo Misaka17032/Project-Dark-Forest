@@ -24,4 +24,4 @@ For every war, the civilization which has fewer technology points will be destro
 #### 3. Use the command 'chmod +x ./run'. Otherwise it may have permission problem.
 #### 4. Run the Unix executable file named 'run'.(Using the command './run')
 ### For All Operate System:
-#### Use python2 to run 'darkforest.df'.
+#### Use python2 to run 'darkforest.py'.
