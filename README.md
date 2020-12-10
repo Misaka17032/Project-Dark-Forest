@@ -18,10 +18,5 @@ A civilization can also get technology points by allying with or destroy other c
 For every war, the civilization which has fewer technology points will be destroyed.
 
 ## Usage
-### For Mac OS/Linux:
-#### 1. Downloads 'run' and 'config.df'.
-#### 2. Open the folder of those two files by terminal.
-#### 3. Use the command 'chmod +x ./run'. Otherwise it may have permission problem.
-#### 4. Run the Unix executable file named 'run'.(Using the command './run')
-### For All Operate System:
-#### Use python2 to run 'darkforest.py'.
+
+The program will keep running. Everytime when it asks "countinue?(y/n/int)", input "y" or anything else to simulate 1 round, input "n" to quit, input any positive integers to pass multiple rounds.
