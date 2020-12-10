@@ -1,125 +1,124 @@
-import random
-def Get_Index_Can_Find(frange,self_index,index_sum):
-	ans = []
-	if self_index + frange < index_sum:
-		for i in xrange(self_index + 1,self_index + frange + 1):
-			if i != self_index:
-				ans.append(i)
-	else:
-		for i in xrange(self_index + 1,index_sum):
-				ans.append(i)
-	return ans
-Civilization_Attitude = []
-Civilization_Technology = []
-Civilization_Extinct = []
-save_log = False
-Continnue = "y"
-print "Welcome to the Dark Forest..."
-if raw_input("Do you want to save log[y/n]:") == "y":
-	save_log = True
-	f = open("details.log", "w")
-	log_text = ""
-Civilization_Number = input("Please set the number of civilizations:\n")
-print "Set successfully."
-if save_log:
-	log_text += "number of civilizations: " + str(Civilization_Number) + "\n"
-Attitude_Set = raw_input("Please set attitude to the alien of each civilization. If you want to be random, input:random. Other behaviors are considered manual input:\n")
-if Attitude_Set != "random" and Civilization_Number <= 10:
-	print "Please set attitude to the alien of each civilization. 0 stands for neutrality, 1 stands for friendly, and -1 stands for aggressively."
-	for i in xrange(1,Civilization_Number+1):
-		Civilization_Attitude.append(input("Set civilization" + str(i) + ":"))
-		if save_log:
-			if Civilization_Attitude[i-1] == -1:
-				log_text += "civilization" + str(i+1) + ": aggressively\n"
-			if Civilization_Attitude[i-1] == 0:
-				log_text += "civilization" + str(i+1) + ": neutrality\n"
-			if Civilization_Attitude[i-1] == 1:
-				log_text += "civilization" + str(i+1) + ": friendly\n"
-		Civilization_Technology.append(10)
-		Civilization_Extinct.append(False)
-	print "Set successfully."
-else:
-	if Civilization_Number > 10:
-		print "The number of civilizations is too large."
-	print "Begin to random the attitudes..."
-	for i in xrange(0,Civilization_Number):
-		Civilization_Attitude.append(random.randint(-1,1))
-		if save_log:
-			if Civilization_Attitude[i] == -1:
-				log_text += "civilization" + str(i+1) + ": aggressively\n"
-			if Civilization_Attitude[i] == 0:
-				log_text += "civilization" + str(i+1) + ": neutrality\n"
-			if Civilization_Attitude[i] == 1:
-				log_text += "civilization" + str(i+1) + ": friendly\n"
-		Civilization_Technology.append(10)
-		Civilization_Extinct.append(False)
-	print "Set successfully."
-print "Start..."
-while Continnue == "y":
-	Skip_Years = input("Set years to skip:\n")
-	if save_log:
-		log_text += "After " + str(Skip_Years) + " years\n"
-	for i in xrange(0,Skip_Years+1):
-		for j in xrange(0,Civilization_Number):
-			if Civilization_Extinct[j] == False:
-				Civilization_Technology[j] += random.randint(5,15)
-				ICF = Get_Index_Can_Find(Civilization_Technology[j]/100,i,Civilization_Number)
-				if Civilization_Attitude[j] == 1:
-					for m in ICF:
-						if Civilization_Extinct[m] != True:
-							if Civilization_Attitude[m] == 0 or Civilization_Attitude[m] == 1:
-								Civilization_Technology[m] += Civilization_Technology[j]/100
-								Civilization_Technology[j] += Civilization_Technology[m]/100
-								if save_log:
-									log_text += "civilization" + str(j+1) + " ally with civilization" + str(m+1) + "\n"
-							else:
-								if(Civilization_Technology[m] > Civilization_Technology[j]):
-									Civilization_Technology[m] += Civilization_Technology[j]/20
-									Civilization_Extinct[j] = True
-									if save_log:
-										log_text += "civilization" + str(j+1) + " has been destroyed by civilization" + str(m+1) + "\n"
-									break
-				elif Civilization_Attitude[j] == -1:
-					for m in ICF:
-						if Civilization_Extinct != True:
-							if(Civilization_Technology[m] < Civilization_Technology[j]):
-								Civilization_Technology[j] += Civilization_Technology[m]/20
-								Civilization_Extinct[m] = True
-								if save_log:
-									log_text += "civilization" + str(m+1) + " has been destroyed by civilization" + str(j+1) + "\n"
-							else:
-								if Civilization_Attitude[m] != 1:
-									Civilization_Technology[m] += Civilization_Technology[j]/20
-									Civilization_Extinct[j] = True
-									if save_log:
-										log_text += "civilization" + str(j+1) + " has been destroyed by civilization" + str(m+1) + "\n"
-									break
-	Rest_Neutrality = 0
-	Rest_Friendly = 0
-	Rest_Aggressively = 0
-	Rest_Neutrality_Technology = 0
-	Rest_Friendly_Technology = 0
-	Rest_Aggressively_Technology = 0
-	Extinct_Number = 0
-	for i in xrange(0,Civilization_Number):
-		if Civilization_Extinct[i] == True:
-			Extinct_Number += 1
-		elif Civilization_Attitude[i] == -1:
-			Rest_Aggressively += 1
-			Rest_Aggressively_Technology += Civilization_Technology[i]
-		elif Civilization_Attitude[i] == 0:
-			Rest_Neutrality += 1
-			Rest_Neutrality_Technology += Civilization_Technology[i]
-		elif Civilization_Attitude[i] == 1:
-			Rest_Friendly += 1
-			Rest_Friendly_Technology += Civilization_Technology[i]
-	print "There are " + str(Rest_Friendly) + " friendly civilizations left. They have " + str(Rest_Friendly_Technology) + " Technology points in all."
-	print "There are " + str(Rest_Neutrality) + " neutrality civilizations left. They have " + str(Rest_Neutrality_Technology) + " Technology points in all."
-	print "There are " + str(Rest_Aggressively) + " aggressively civilizations left. They have " + str(Rest_Aggressively_Technology) + " Technology points in all."
-	print str(Extinct_Number) + " civilizations have been extincted."
-	if save_log:
-		log_text += "There are " + str(Rest_Friendly) + " friendly civilizations left. They have " + str(Rest_Friendly_Technology) + " Technology points in all.\nThere are " + str(Rest_Neutrality) + " neutrality civilizations left. They have " + str(Rest_Neutrality_Technology) + " Technology points in all.\nThere are " + str(Rest_Aggressively) + " aggressively civilizations left. They have " + str(Rest_Aggressively_Technology) + " Technology points in all.\n" + str(Extinct_Number) + " civilizations have been extincted.\n"
-	Continnue = raw_input("Are you sure to Continnue?[y/n]:")
-if save_log:
-	f.write(log_text)
-	f.close()
+from random import randint, random
+import math
+import time
+civils = []
+def distance(pos1, pos2):
+	return math.ceil(math.sqrt((pos1[0]-pos2[0])**2+(pos1[1]-pos2[1])**2+(pos1[2]-pos2[2])**2))
+def share(n1, n2):
+	for c in civils[n2].known_civil:
+		if c not in civils[n1].known_civil:
+			civils[n1].new_civil(c)
+class Civilization(object):
+	number = 0
+	tech_points = 10
+	position = (0, 0, 0)
+	attitude = 0
+	extinct = False
+	known_civil = []
+	def __init__(self):
+		super(Civilization, self).__init__()
+		self.number = len(civils)
+		self.position = (randint(-10000,10000), randint(-10000,10000), randint(-10000,10000))
+		self.attitude = randint(-1,1)
+	def dev(self):
+		self.tech_points = int((self.tech_points + randint(5, 15))*1.05)
+	def search_range(self):
+		return max(int(2**int((self.tech_points)/7000)), int((self.tech_points)/100), 10)
+	def search(self):
+		for i, c in enumerate(civils):
+			d = distance(self.position, c.position)
+			if d < self.search_range() and d != 0 and i not in self.known_civil and c.extinct != True:
+				self.new_civil(i)
+	def new_civil(self, number):
+		self.known_civil.append(number)
+		if self.attitude == -1:
+			self.attack(number)
+		elif self.attitude == 1:
+			self.ally(number)
+	def attack(self, number):
+		if self.tech_points > civils[number].tech_points:
+			civils[number].extinct = True
+			self.tech_points += int(civils[number].tech_points*random()/2)
+			share(self.number, number)
+		elif self.tech_points < civils[number].tech_points and civils[number].attitude != 1:
+				self.extinct = True
+				civils[number].tech_points += int(self.tech_points*random()/2)
+				share(number, self.number)
+	def ally(self, number):
+		if civils[number].attitude != -1:
+			total_points = self.tech_points + civils[number].tech_points
+			self.tech_points += int(total_points*random()/40)
+			civils[number].tech_points += int(total_points*random()/40)
+			share(number, self.number)
+			share(self.number, number)
+		else:
+			civils[number].attack(self.number)
+	def grow(self):
+		if self.extinct == False:
+			self.dev()
+			self.search()
+			if self.attitude == -1:
+				for i in self.known_civil:
+					if civils[i].extinct != True and distance(self.position, civils[i].position) < self.search_range():
+						self.attack(i)
+			elif self.attitude == 1:
+				for i in self.known_civil:
+					if civils[i].extinct != True and distance(self.position, civils[i].position) < self.search_range():
+						self.ally(i)
+
+for i in range(0, 1000):
+	civils.append(Civilization())
+cnt = 0
+while True:
+	put = input("Continue?(y/n/int)")
+	try:
+		a = max(1, int(put))
+	except:
+		if put == 'n':
+			quit()
+		else:
+			a = 1
+	for i in range(a):
+		t = time.time()
+		if randint(1, 10) == 5:
+			civils.append(Civilization())
+		tmp = 0
+		outon = False	
+		for c in civils:
+			tmp += 1
+			c.grow()
+			if outon == False:
+				if time.time() - t > 60:
+					outon = True
+			else:
+				print(tmp)
+		snum = 0
+		alive_point = 0
+		alive_number = 0
+		f_num = 0
+		n_num = 0
+		a_num = 0
+		for c in civils:
+			if c.extinct != True:
+				if c.tech_points > civils[snum].tech_points:
+					snum = c.number
+				alive_number += 1
+				alive_point += c.tech_points
+				if c.attitude == 1:
+					f_num += 1
+				elif c.attitude == 0:
+					n_num += 1
+				else:
+					a_num += 1
+		if a != 1:
+			print("[" + str(i+1), "/", str(a) + "]")
+		cnt += 1
+	print("[*]Century:", cnt)
+	print("[*]Total Alive:",f_num + n_num + a_num, "of", len(civils))
+	print("[*]Friendly Civilizations:", f_num)
+	print("[*]Neutrally Civilizations:", n_num)
+	print("[*]Aggressively Civilizations:", a_num)
+	print("[*]Strongest Civilization:", snum)
+	print("[*]Attitude:", civils[snum].attitude)
+	print("[*]Technology Points:", civils[snum].tech_points)
+	print("[*]Average Technology Points:", int(alive_point / alive_number))
